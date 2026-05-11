@@ -1,3 +1,5 @@
+[Home Page](https://mallikarjun524.github.io/)
+
 # 🚀 Flutter Android App Links (Deep Linking)
 
 This repository hosts the digital handshake files (`assetlinks.json`) required to enable **Android App Links** for the "Deep Link Cookbook" Flutter application.
@@ -58,13 +60,14 @@ void main() {
 }
 
 final GoRouter _router = GoRouter(
+  initialLocation: "/",
   routes: [
     GoRoute(path: "/", builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: "/details/:id",
       builder: (context, state) {
         String id = state.pathParameters["id"] ?? "";
-        return DetailsScreen(id: id);
+        return DetailsScreen(id: id, key: ValueKey(id));
       },
     ),
   ],
@@ -110,7 +113,22 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Home Page")),
-      body: Center(child: Text("Welcome to HomePage")),
+      body: Center(
+        child:Column(
+            children:[
+                Text("Welcome to HomePage"),
+                TextField(
+                  controller: pageController,
+                  onSubmitted: (value) {
+                    // Use context.push function to display a page and able come back current page by pressing back button
+                    // Use conext.go funtion to display a page and cannot able to come back current page context.go("/details/984"); 
+                    context.push("/details/$value");
+                  },
+                  decoration: InputDecoration(hintText: "Enter Details id"),
+                ),
+            ]
+        )
+     ),
     );
   }
 }

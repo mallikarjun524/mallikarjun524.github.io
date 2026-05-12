@@ -131,7 +131,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
 ```
 
 ## 🧪 4. Testing Commands

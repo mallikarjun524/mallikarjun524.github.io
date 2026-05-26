@@ -11,7 +11,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.exmaple.parkease",
+      "package_name": "com.nammacarparking",
       "sha256_cert_fingerprints": ["3A:5A:BC:C6:D0:D5:44:C1:66:51:01:BF:81:5B:9A:52:EF:61:2B:E3:EC:8E:30:8A:D8:1A:58:9B:8E:DB:3C:41"]
     }
   }

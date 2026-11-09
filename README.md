@@ -1,5 +1,3 @@
-[Home Page](https://mallikarjun524.github.io/)
-
 # 🚀 Flutter Android App Links (Deep Linking)
 
 This repository hosts the digital handshake files (`assetlinks.json`) required to enable **Android App Links** for the "Deep Link Cookbook" Flutter application.

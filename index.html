@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credential Sharing Demo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 400px; margin: 40px auto; padding: 20px; }
+    input, button { display: block; width: 100%; margin: 10px 0; padding: 12px; font-size: 16px; }
+    button { background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #1557b0; }
+    .msg { margin-top: 16px; padding: 10px; border-radius: 6px; }
+    .success { background: #e6f4ea; color: #137333; }
+    .error { background: #fce8e6; color: #c5221f; }
+  </style>
+</head>
+<body>
+  <h2>Website Login</h2>
+
+  <form id="loginForm">
+    <input type="text" id="username" name="id" autocomplete="username" placeholder="Username / Email" required>
+    <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Password" required>
+    <button type="submit">Login & Save Credential</button>
+  </form>
+
+  <button id="getCredentialBtn" style="background:#34a853;">Get Saved Credential (Auto-fill)</button>
+
+  <div id="message"></div>
+
+  <script> 
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('message');
+
+    function showMessage(text, isError = false) {
+      msg.className = 'msg ' + (isError ? 'error' : 'success');
+      msg.textContent = text;
+    }
+
+    // ---------- SAVE CREDENTIAL ----------
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        showMessage('Please fill both fields', true);
+        return;
+      }
+
+      // Simulate successful login (replace with your real API call)
+      const loginSuccess = true; // await fetch('/api/login', ...)
+
+      if (!loginSuccess) {
+        showMessage('Login failed', true);
+        return;
+      }
+
+      // Save to browser / Google Password Manager
+      if (window.PasswordCredential) {
+        try {
+          const cred = new PasswordCredential({
+            id: username,
+            password: password,
+            name: username          // optional display name
+          });
+
+          await navigator.credentials.store(cred);
+          showMessage('Login successful + Credential saved! It can now appear in the Flutter app.');
+        } catch (err) {
+          console.error(err);
+          showMessage('Login OK, but failed to save credential: ' + err.message, true);
+        }
+      } else {
+        showMessage('Login successful (Credential Management API not supported in this browser)');
+      }
+    });
+
+    // ---------- GET / AUTO-FILL CREDENTIAL ----------
+    document.getElementById('getCredentialBtn').addEventListener('click', async () => {
+      if (!window.PasswordCredential) {
+        showMessage('Credential Management API not supported', true);
+        return;
+      }
+
+      try {
+        const cred = await navigator.credentials.get({
+          password: true,
+          mediation: 'optional'   // 'required' forces UI, 'silent' tries without UI
+        });
+
+        if (cred && cred.type === 'password') {
+          document.getElementById('username').value = cred.id;
+          document.getElementById('password').value = cred.password;
+          showMessage(`Credential loaded: ${cred.id} Password ${cred.password}`);
+        } else {
+          showMessage('No saved credential found or user cancelled', true);
+        }
+      } catch (err) {
+        console.error(err);
+        showMessage('Error getting credential: ' + err.message, true);
+      }
+    });
+    // Optional: try silent auto-fill on page load
+    window.addEventListener('load', async () => {
+      if (!window.PasswordCredential) return;
+      try {
+        const cred = await navigator.credentials.get({
+          password: true,
+          mediation: 'silent'
+        });
+        if (cred) {
+        //   document.getElementById('username').value = cred.id;
+        //   document.getElementById('password').value = cred.password;
+          showMessage(`Auto-filled: ${cred.id} Passoword ${cred.password}`);
+        }
+      } catch (_) {}
+    });
+  </script>
+</body>
+</html>

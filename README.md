@@ -11,7 +11,7 @@ This repository hosts the digital handshake files (`assetlinks.json`) required t
     └── assetlinks.json      # The Digital Handshake file (Android)
 ```
 ## 🛠️ 1. Web Configuration (assetlinks.json)
-### This file is hosted at https://mallikarjun524.github.io/.well-known/assetlinks.json. It proves to Android that this website belongs to our app.
+**This file is hosted at https://mallikarjun524.github.io/.well-known/assetlinks.json. It proves to Android that this website belongs to our app.**
 
 ```json
 [
@@ -31,7 +31,7 @@ This repository hosts the digital handshake files (`assetlinks.json`) required t
 ```
 
 ## 📱 2. Android Manifest Configuration
-### To enable deep linking, the following intent-filter was added to android/app/src/main/AndroidManifest.xml inside the manifest -> application -> activity tag you need to put this code
+**To enable deep linking, the following intent-filter was added to android/app/src/main/AndroidManifest.xml inside the manifest -> application -> activity tag you need to put this code**
 
 ```xml
 <intent-filter android:autoVerify="true">
@@ -46,7 +46,7 @@ This repository hosts the digital handshake files (`assetlinks.json`) required t
 ```
 
 ## 🎯 3. Flutter (Dart) Routing
-### We use the go_router package to handle incoming URLs and navigate to the correct screen.
+**We use the go_router package to handle incoming URLs and navigate to the correct screen.**
 
 > main.dart
 ```dart
@@ -132,22 +132,22 @@ class HomeScreen extends StatelessWidget {
 ```
 
 ## 🧪 4. Testing Commands
-### Ensure your device is connected via USB with Debugging enabled.
+**Ensure your device is connected via USB with Debugging enabled.**
 
-## A. Get SHA-256 Fingerprint
-### Run this to get the ***`sha256_cert_fingerprints`*** value for your assetlinks.json:
+- A. Get SHA-256 Fingerprint
+**Run this to get the ***`sha256_cert_fingerprints`*** value for your assetlinks.json:**
 ```bash
 keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
 ```
 
-## B. Verify App Link Status
-### first run app and then Run this to check if Android has verified the handshake:
+- B. Verify App Link Status
+**first run app and then Run this to check if Android has verified the handshake:**
 ```bash
 adb shell pm get-app-links com.example.deeplink_cookbook
 ```
 
-## C. Trigger Deep Link via Terminal
-### Test if the app opens to a specific route:
+- C. Trigger Deep Link via Terminal
+**Test if the app opens to a specific route:**
 ```bash
 adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://mallikarjun524.github.io/details/42"
 ```
